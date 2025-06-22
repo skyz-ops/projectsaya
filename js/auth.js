@@ -8,7 +8,7 @@ class Database {
         if (!this.users.some(u => u.role === 'admin')) {
             this.createUser({
                 name: 'Admin',
-                email: 'admin@example.com',
+                email: 'admin@admin.com',
                 password: 'admin123',
                 role: 'admin'
             });
@@ -96,9 +96,9 @@ if (loginForm) {
             
             // Redirect berdasarkan role
             if (user.role === 'admin') {
-                window.location.href = '/admin';
+                window.location.href = 'admin.html';
             } else {
-                window.location.href = '/user';
+                window.location.href = 'user.html';
             }
         } else {
             showMessage(messageEl, 'Email atau password salah!');
@@ -144,6 +144,6 @@ if (registerForm) {
         // Buat session dan login
         const session = db.createSession(newUser.id);
         localStorage.setItem('authToken', session.token);
-        window.location.href = '/user';
+        window.location.href = 'user/html';
     });
 }

@@ -2,7 +2,7 @@
 function checkAuth() {
     const token = localStorage.getItem('authToken');
     if (!token) {
-        window.location.href = '/index';
+        window.location.href = 'index.html';
         return null;
     }
     
@@ -11,7 +11,7 @@ function checkAuth() {
     
     if (!user) {
         localStorage.removeItem('authToken');
-        window.location.href = '/index';
+        window.location.href = 'index.html';
         return null;
     }
     
@@ -28,6 +28,6 @@ if (user) {
     document.getElementById('logoutBtn').addEventListener('click', (e) => {
         e.preventDefault();
         localStorage.removeItem('authToken');
-        window.location.href = '/index';
+        window.location.href = 'index.html';
     });
 }

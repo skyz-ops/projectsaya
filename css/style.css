@@ -1,3 +1,4 @@
+/* Global Styles */
 :root {
     --primary: #3498db;
     --secondary: #2980b9;
@@ -19,6 +20,7 @@ body {
     color: var(--dark);
 }
 
+/* Auth Pages */
 .auth-container {
     display: flex;
     justify-content: center;
@@ -39,7 +41,6 @@ body {
 .auth-card h2 {
     margin-bottom: 20px;
     text-align: center;
-    color: var(--dark);
 }
 
 .form-group {
@@ -77,24 +78,13 @@ body {
     background-color: var(--secondary);
 }
 
-.message {
-    margin-top: 15px;
-    padding: 10px;
-    border-radius: 4px;
+.error-message {
+    color: var(--danger);
+    margin-bottom: 15px;
     text-align: center;
 }
 
-.message.error {
-    background-color: #ffebee;
-    color: var(--danger);
-}
-
-.message.success {
-    background-color: #e8f5e9;
-    color: var(--success);
-}
-
-/* Dashboard Styles */
+/* Dashboard Layout */
 .dashboard {
     display: flex;
     min-height: 100vh;
@@ -168,38 +158,60 @@ body {
     margin-bottom: 20px;
 }
 
-/* Admin specific styles */
-.table {
+/* Admin Specific */
+.admin .sidebar {
+    background-color: #1a252f;
+}
+
+#usersTable {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
 }
 
-.table th, .table td {
+#usersTable th, #usersTable td {
     padding: 12px 15px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
 
-.table th {
+#usersTable th {
     background-color: #f5f5f5;
     font-weight: 500;
 }
 
-.action-btn {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-right: 5px;
+/* Profile & Settings */
+#profileForm, #passwordForm {
+    max-width: 500px;
+    margin: 0 auto;
 }
 
-.edit-btn {
-    background-color: #f39c12;
-    color: white;
+.danger-zone {
+    border-left: 4px solid var(--danger);
+    margin-top: 30px;
 }
 
-.delete-btn {
+.btn-danger {
     background-color: var(--danger);
-    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.message {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.message.error {
+    background-color: #ffebee;
+    color: var(--danger);
+}
+
+.message.success {
+    background-color: #e8f5e9;
+    color: var(--success);
 }

@@ -1,4 +1,3 @@
-// Database sederhana menggunakan localStorage
 class Database {
     constructor() {
         this.users = JSON.parse(localStorage.getItem('users')) || [];
@@ -7,61 +6,46 @@ class Database {
         // Buat admin default jika belum ada
         if (!this.users.some(u => u.role === 'admin')) {
             this.createUser({
-                name: 'Admin',
-                email: 'admin@admin.com',
-                password: 'admin123',
-                role: 'admin'
+                name: "Admin",
+                email: "admin@admin.com",
+                password: "admin123",
+                role: "admin"
             });
         }
     }
-    
+
     createUser(user) {
-        user.id = this.users.length > 0 ? Math.max(...this.users.map(u => u.id)) + 1 : 1;
-        user.createdAt = new Date().toISOString();
+        user.id = this.users.length + 1;
         this.users.push(user);
         this.save();
-        return user;
     }
-    
-    getUserByEmail(email) {
-        return this.users.find(u => u.email === email);
-    }
-    
+
     validateUser(email, password) {
-        const user = this.getUserByEmail(email);
-        if (!user) return null;
-        return user.password === password ? user : null;
+        return this.users.find(u => u.email === email && u.password === password);
     }
-    
+
     createSession(userId) {
         const session = {
-            id: this.sessions.length > 0 ? Math.max(...this.sessions.map(s => s.id)) + 1 : 1,
+            id: this.sessions.length + 1,
             userId,
-            token: this.generateToken(),
-            createdAt: new Date().toISOString(),
-            expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 hari
+            token: `token-${Date.now()}`,
+            expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 hari
         };
         this.sessions.push(session);
         this.save();
         return session;
     }
-    
-    getSession(token) {
-        const session = this.sessions.find(s => s.token === token);
-        if (!session || new Date(session.expiresAt) < new Date()) return null;
-        return session;
-    }
-    
-    getUserFromSession(token) {
-        const session = this.getSession(token);
+
+    getCurrentUser() {
+        const token = localStorage.getItem('authToken');
+        if (!token) return null;
+        
+        const session = this.sessions.find(s => s.token === token && new Date(s.expiresAt) > new Date());
         if (!session) return null;
+        
         return this.users.find(u => u.id === session.userId);
     }
-    
-    generateToken() {
-        return 'token-' + Math.random().toString(36).substr(2) + Date.now().toString(36);
-    }
-    
+
     save() {
         localStorage.setItem('users', JSON.stringify(this.users));
         localStorage.setItem('sessions', JSON.stringify(this.sessions));
@@ -70,80 +54,67 @@ class Database {
 
 const db = new Database();
 
-// Fungsi utilitas
-function showMessage(element, message, isError = true) {
-    element.textContent = message;
-    element.className = 'message ' + (isError ? 'error' : 'success');
-    element.style.display = 'block';
-    setTimeout(() => {
-        element.style.display = 'none';
-    }, 5000);
+// Fungsi untuk redirect berdasarkan role
+function checkAuth(requiredRole) {
+    const user = db.getCurrentUser();
+    if (!user) {
+        window.location.href = "index.html";
+        return null;
+    }
+    if (requiredRole && user.role !== requiredRole) {
+        window.location.href = user.role === "admin" ? "admin.html" : "user.html";
+        return null;
+    }
+    return user;
 }
 
-// Login
-const loginForm = document.getElementById('loginForm');
-if (loginForm) {
-    loginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-        const messageEl = document.getElementById('loginMessage');
-        
-        const user = db.validateUser(email, password);
-        if (user) {
-            const session = db.createSession(user.id);
-            localStorage.setItem('authToken', session.token);
-            
-            // Redirect berdasarkan role
-            if (user.role === 'admin') {
-                window.location.href = 'admin.html';
-            } else {
-                window.location.href = 'user.html';
-            }
-        } else {
-            showMessage(messageEl, 'Email atau password salah!');
-        }
-    });
-}
+// Handle Login
+document.getElementById("loginForm")?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+    const recaptchaResponse = grecaptcha.getResponse();
 
-// Register
-const registerForm = document.getElementById('registerForm');
-if (registerForm) {
-    registerForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('regName').value;
-        const email = document.getElementById('regEmail').value;
-        const password = document.getElementById('regPassword').value;
-        const confirmPassword = document.getElementById('regConfirmPassword').value;
-        const messageEl = document.getElementById('registerMessage');
-        
-        // Validasi
-        if (password !== confirmPassword) {
-            showMessage(messageEl, 'Password tidak cocok!');
-            return;
-        }
-        
-        if (password.length < 8) {
-            showMessage(messageEl, 'Password minimal 8 karakter!');
-            return;
-        }
-        
-        if (db.getUserByEmail(email)) {
-            showMessage(messageEl, 'Email sudah terdaftar!');
-            return;
-        }
-        
-        // Buat user baru
-        const newUser = db.createUser({
-            name,
-            email,
-            password, // Dalam produksi nyata, password harus di-hash
-            role: 'user'
-        });
-        
-        // Buat session dan login
-        const session = db.createSession(newUser.id);
-        localStorage.setItem('authToken', session.token);
-        window.location.href = 'user/html';
-    });
-}
+    if (!recaptchaResponse) {
+        alert("Harap verifikasi reCAPTCHA!");
+        return;
+    }
+
+    const user = db.validateUser(email, password);
+    if (user) {
+        const session = db.createSession(user.id);
+        localStorage.setItem("authToken", session.token);
+        window.location.href = user.role === "admin" ? "admin.html" : "user.html";
+    } else {
+        document.getElementById("loginError").textContent = "Email atau password salah!";
+    }
+});
+
+// Handle Register
+document.getElementById("registerForm")?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = document.getElementById("regName").value;
+    const email = document.getElementById("regEmail").value;
+    const password = document.getElementById("regPassword").value;
+    const confirmPassword = document.getElementById("regConfirmPassword").value;
+    const recaptchaResponse = grecaptcha.getResponse();
+
+    if (!recaptchaResponse) {
+        alert("Harap verifikasi reCAPTCHA!");
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        alert("Password tidak cocok!");
+        return;
+    }
+
+    if (db.users.some(u => u.email === email)) {
+        alert("Email sudah terdaftar!");
+        return;
+    }
+
+    db.createUser({ name, email, password, role: "user" });
+    alert("Registrasi berhasil! Silakan login.");
+    window.location.href = "index.html";
+});

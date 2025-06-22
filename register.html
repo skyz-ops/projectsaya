@@ -1,38 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-    <div class="auth-container">
-        <div class="auth-card">
-            <h2>Register</h2>
-            <form id="registerForm">
-                <div class="form-group">
-                    <label for="regName">Nama Lengkap</label>
-                    <input type="text" id="regName" required>
-                </div>
-                <div class="form-group">
-                    <label for="regEmail">Email</label>
-                    <input type="email" id="regEmail" required>
-                </div>
-                <div class="form-group">
-                    <label for="regPassword">Password</label>
-                    <input type="password" id="regPassword" required minlength="8">
-                </div>
-                <div class="form-group">
-                    <label for="regConfirmPassword">Konfirmasi Password</label>
-                    <input type="password" id="regConfirmPassword" required>
-                </div>
-                <button type="submit" class="btn">Daftar</button>
-                <p>Sudah punya akun? <a href="index.html">Login disini</a></p>
-                <div id="registerMessage" class="message"></div>
-            </form>
-        </div>
+<!-- Struktur mirip login, tambahkan input nama & konfirmasi password -->
+<form id="registerForm">
+    <div class="form-group">
+        <input type="text" id="regName" placeholder="Nama Lengkap" required>
     </div>
-    <script src="js/auth.js"></script>
-</body>
-</html>
+    <div class="form-group">
+        <input type="email" id="regEmail" placeholder="Email" required>
+    </div>
+    <div class="form-group">
+        <input type="password" id="regPassword" placeholder="Password" required>
+    </div>
+    <div class="form-group">
+        <input type="password" id="regConfirmPassword" placeholder="Konfirmasi Password" required>
+    </div>
+    <div class="g-recaptcha" data-sitekey="6LfIVWkrAAAAAKc5KGzdBT_CTfPdrNgCBcwfm7S3"></div>
+    <button type="submit" class="btn">Daftar</button>
+</form>

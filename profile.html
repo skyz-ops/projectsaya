@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profil</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="dashboard">
+        <div class="sidebar">
+            <h2>Dashboard</h2>
+            <ul>
+                <li><a href="user.html">Beranda</a></li>
+                <li><a href="profile.html" class="active">Profil</a></li>
+                <li><a href="settings.html">Pengaturan</a></li>
+                <li><a href="#" id="logoutBtn">Logout</a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <div class="header">
+                <h1>Edit Profil</h1>
+            </div>
+            <div class="card">
+                <form id="profileForm">
+                    <div class="form-group">
+                        <label for="profileName">Nama Lengkap</label>
+                        <input type="text" id="profileName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="profileEmail">Email</label>
+                        <input type="email" id="profileEmail" readonly>
+                    </div>
+                    <button type="submit" class="btn">Simpan Perubahan</button>
+                    <div id="profileMessage" class="message"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="js/profile.js"></script>
+</body>
+</html>

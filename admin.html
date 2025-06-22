@@ -7,13 +7,12 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="dashboard">
+    <div class="dashboard admin">
         <div class="sidebar">
             <h2>Admin Panel</h2>
             <ul>
-                <li><a href="/admin" class="active">Dashboard</a></li>
-                <li><a href="/users">Manajemen User</a></li>
-                <li><a href="/settings">Pengaturan</a></li>
+                <li><a href="admin.html" class="active">Dashboard</a></li>
+                <li><a href="#" id="manageUsers">Manajemen User</a></li>
                 <li><a href="#" id="logoutBtn">Logout</a></li>
             </ul>
         </div>
@@ -21,30 +20,26 @@
             <div class="header">
                 <h1>Admin Dashboard</h1>
                 <div class="user-info">
-                    <img id="userAvatar" src="https://via.placeholder.com/40" alt="Admin">
-                    <span id="userName">Admin</span>
+                    <img id="adminAvatar" src="https://via.placeholder.com/40" alt="Admin">
                 </div>
             </div>
             <div class="card">
-                <h3>Manajemen User</h3>
-                <table class="table">
+                <h3>Daftar User</h3>
+                <table id="usersTable">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Nama</th>
                             <th>Email</th>
-                            <th>Role</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
-                    <tbody id="usersTable">
+                    <tbody>
                         <!-- Data user akan diisi oleh JavaScript -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    <script src="js/dashboard.js"></script>
     <script src="js/admin.js"></script>
 </body>
 </html>
